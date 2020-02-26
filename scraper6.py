@@ -102,39 +102,43 @@ for jj in range(0,94):
 
         results=[]
         for result in soup.find_all('div', {'class':"results"}):
-                results.append(result.text.split(" ")[0])
+                results.append(result.findAll('div',{'class':'results-team-score'})[0].text+':'+result.findAll('div',{'class':'results-team-score'})[1].text)
         resultados={}
         finais=[]
         for i in range(0,len(results)):
             resultados[maps[i]]=results[i]
             final=results[i].split(":")
-            
-            if int(final[0])>int(final[1]):
-                final="A"
-            elif int(final[0])<int(final[1]):
-                final="B"
-            else:
-                final="E"
+
+            try:
+                if int(final[0])>int(final[1]):
+                    final="A"
+                elif int(final[0])<int(final[1]):
+                    final="B"
+                else:
+                    final="E"
+            except ValueError:
+                final="N"
             finais.append(final)
 
         data=soup.find('div', {'class':"timeAndEvent"}).find('div', {'class':"date"}).text
         hora=soup.find('div', {'class':"timeAndEvent"}).find('div', {'class':"time"}).text
         evento=soup.find('div', {'class':"event text-ellipsis"}).text
-        '''
-        print("os times foram:%s, %s"%(teams[0],teams[1]))
-        print("a configuração foi")
-        print(equipe)
-        print("os mapas foram")
-        print(maps)
-        print("os resultados foram")
-        print(resultados)
-        print("aconteceu em",data,"as",hora)
-        print("gastei um total de ")
-        print(datetime.now() - startTime)
+        
+##        print("os times foram:%s, %s"%(teams[0],teams[1]))
+##        print("a configuração foi")
+##        print(equipe)
+##        print("os mapas foram")
+##        print(maps)
+##        print("os resultados foram")
+##        print(resultados)
+##        print("aconteceu em",data,"as",hora)
+##        print("gastei um total de ")
+##        print(datetime.now() - startTime)
 
-        '''
+        
         
         with open("dbteste.csv","a")as csvfile:
+            pass
             csv_writer=csv.writer(csvfile,delimiter=';')
             if (jj==0 and index==0):
                 row="Time A,,JogadorA1,,JogadorA2,,JogadorA3,,JogadorA4,,JogadorA5,,Time B,,JogadorB1,,JogadorB2,,JogadorB3,,JogadorB4,,JogadorB5,,Mapa,,ResultadoA,,ResultadoB,,Hora,,Data,,Evento"
